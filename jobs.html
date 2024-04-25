@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    type="text/css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</head>
+
+<body>
+
+  <header>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container">
+        <a class="navbar-brand" href="#">Jobs Portal</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+          aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="index.html">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="jobs.html">Jobs</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="report.html">Report</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <section class="container mt-4">
+    <h1>List of Jobs</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col">
+          <label for="categoryFilter">Filter by Category:</label>
+          <select id="categoryFilter" class="form-control" style="appearance: auto">
+            <option value="allCategories">All Categories</option>
+            <option value="IT">Information Technology</option>
+            <option value="Finance">Finance</option>
+            <option value="Marketing">Marketing</option>
+          </select>
+        </div>
+        <div class="col">
+          <label for="locationFilter">Filter by Location:</label>
+          <select id="locationFilter" class="form-control" style="appearance: auto">
+            <option value="allLocations">All Locations</option>
+            <option value="New York">New York</option>
+            <option value="San Francisco">San Francisco</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </section><br>
+
+  <section class="container">
+    <div id="jobList" class="row"></div>
+  </section>
+
+  <script>
+    const jobs = [
+      {id: 1, name: "Software Engineer", category: "IT", location: "New York", postDate: "2023-01-15"},
+      {id: 2, name: "Financial Analyst", category: "Finance", location: "San Francisco", postDate: "2023-02-20"},
+      {id: 3, name: "Data Scientist", category: "IT", location: "New York", postDate: "2023-03-10"},
+      {id: 4, name: "Marketing Manager", category: "Marketing", location: "San Francisco", postDate: "2023-04-05"}
+    ];
+
+    const categoryFilter = document.querySelector("#categoryFilter")
+    const locationFilter = document.querySelector("#locationFilter")
+    const jobList = document.querySelector("#jobList")
+
+    function updateJobList(filteredJobs) {
+      jobList.innerHTML = ''
+
+      for (let i = 0; i < filteredJobs.length; i++) {
+        const col = document.createElement('div')
+        col.className = 'col-md-6'
+
+        const card = document.createElement('div')
+        card.className = 'card mb-3'
+
+        const cardHeader = document.createElement('div')
+        cardHeader.className = 'card-header'
+        const h2 = document.createElement('h2')
+        h2.textContent = filteredJobs[i].name
+
+        cardHeader.appendChild(h2)
+
+        const cardBody = document.createElement('div')
+        cardBody.className = 'card-body'
+
+        const category = document.createElement('p')
+        category.className = 'card-text'
+        category.innerHTML = `<strong>Category: </strong>${filteredJobs[i].category}`
+
+        const location = document.createElement('p')
+        location.className = 'card-text'
+        location.innerHTML = `<strong>Location: </strong>${filteredJobs[i].location}`
+
+        const date = document.createElement('p')
+        date.className = 'card-text'
+        date.innerHTML = `<strong>Post Date: </strong>${filteredJobs[i].postDate}`
+
+        const detailsLink = document.createElement('a')
+        detailsLink.href = `jobDetails.html?id=${filteredJobs[i].id}`
+        detailsLink.className = 'btn btn-primary'
+        detailsLink.textContent = 'Details'
+
+        cardBody.appendChild(category)
+        cardBody.appendChild(location)
+        cardBody.appendChild(date)
+        cardBody.appendChild(detailsLink)
+
+        card.appendChild(cardHeader)
+        card.appendChild(cardBody)
+
+        col.appendChild(card)
+        jobList.appendChild(col)
+      }
+    }
+
+    categoryFilter.addEventListener("change", applyCategoryFilter)
+    locationFilter.addEventListener("change", applyLocationFilter)
+    let filteredJobs = []
+
+    function applyCategoryFilter() {
+      const selectedCategory = categoryFilter.value
+      filteredJobs = []
+
+      if (selectedCategory !== "allCategories") {
+        for (let i = 0; i < jobs.length; i++) {
+          if (jobs[i].category === selectedCategory) {
+            filteredJobs.push(jobs[i])
+          }
+        }
+      }
+      updateJobList(filteredJobs)
+    }
+
+    function applyLocationFilter() {
+      const selectedLocation = locationFilter.value
+      filteredJobs = []
+
+      if (selectedLocation !== "allLocations") {
+        for (let i = 0; i < jobs.length; i++) {
+          if (jobs[i].location === selectedLocation) {
+            filteredJobs.push(jobs[i])
+          }
+        }
+      }
+      updateJobList(filteredJobs)
+    }
+    updateJobList(jobs)
+  </script>
+</body>
+
+</html>
